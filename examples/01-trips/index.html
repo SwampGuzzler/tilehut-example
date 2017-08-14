@@ -11,12 +11,18 @@
         margin: 0;
         padding: 0;
     }
-    
+
     #map {
         position: absolute;
         top: 0;
         bottom: 0;
         width: 100%;
+    }
+
+    #countFilter {
+      position: absolute;
+      top: 10px;
+      right: 10px;
     }
     </style>
 </head>
@@ -24,6 +30,7 @@
 <body>
     <script src='https://api.mapbox.com/mapbox-gl-js/v0.39.1/mapbox-gl.js'></script>
     <div id='map'></div>
+    <input id='countFilter' />
     <script type="text/javascript">
     // Nota Bene:
     // Please make sure to serve this file via a webserver as otherwise your browser might not load the external 'style.json' file
@@ -34,6 +41,38 @@
         zoom: 16,
         style: 'style.json', // stylesheet location (external file) or style object
         hash: true // adds zoom level and coordinates in the url (e.g. http://localhost:8080/#3.84/58.63/43.81)
+    });
+
+    var popup = new mapboxgl.Popup({
+      closeButton: false
+    });
+
+    var countFilter = document.getElementById('countFilter');
+
+    map.on('load', function() {
+      countFilter.addEventListener('keyup', function(e) {
+        var value = e.target.value;
+        if (value || parseInt(value) === 0) {
+          map.setFilter('hubway-routed', ['>', 'count', parseInt(value)]);
+        } else if (value === '') {
+          map.setFilter('hubway-routed', ['>', 'count', 0]);
+        }
+      });
+    });
+
+    map.on('mousemove', 'hubway-routed', function(e) {
+      // Change the cursor style as a UI indicator.
+      map.getCanvas().style.cursor = 'pointer';
+
+      var feature = e.features[0];
+      popup.setLngLat(e.lngLat)
+        .setHTML('<p>Route from ' + feature.properties.start_station_name + 'to ' + feature.properties.end_station_name + '</p><p># of Trips: ' + feature.properties.count + '</p>')
+        .addTo(map);
+    });
+
+    map.on('mouseleave', 'hubway-routed', function() {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
     });
     </script>
 </body>
