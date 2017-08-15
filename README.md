@@ -1,13 +1,18 @@
-# Slippy maps, you complete me: A friendly step-by-step guide to serving up your own slippy web map tiles with tilehut.js 
+Peep this for our visuals: https://swampguzzler.github.io/tilehut-example/examples/01-trips/
+(tiles on heroku at https://luke-hubway-tiles.herokuapp.com/hubway-routed)
+
+Cloned from https://github.com/joeyklee/hello-vector-tiles
+
+# Slippy maps, you complete me: A friendly step-by-step guide to serving up your own slippy web map tiles with tilehut.js
 
 
-Whether you're a full-time geo-web developer or a hobby map maker, chances are you've used and even created your own slippy web map tiles. However, until now, the process for creating your own map tile server hasn't been so user friendly and accessible to the wider geocommunity. In this workshop, we will step you through the process of serving up your own slippy map tiles using tilehut.js - a modest, cozy, and open source home for your map tiles. As a participant, you will: 1. learn to create your own map tiles - we will focus on vector tiles, 2. create your own map tile server to show the world your geodata creations and 3. see how to bring your tiles into your web mapping projects. Participants will leave the workshop with a workflow for going from A (raw data) to B (an interactive web map) that they can apply in their own projects in the future. 
+Whether you're a full-time geo-web developer or a hobby map maker, chances are you've used and even created your own slippy web map tiles. However, until now, the process for creating your own map tile server hasn't been so user friendly and accessible to the wider geocommunity. In this workshop, we will step you through the process of serving up your own slippy map tiles using tilehut.js - a modest, cozy, and open source home for your map tiles. As a participant, you will: 1. learn to create your own map tiles - we will focus on vector tiles, 2. create your own map tile server to show the world your geodata creations and 3. see how to bring your tiles into your web mapping projects. Participants will leave the workshop with a workflow for going from A (raw data) to B (an interactive web map) that they can apply in their own projects in the future.
 
 
-Half day (4 hours) 
+Half day (4 hours)
 
 
-The workshop is aimed to be as inclusive as possible and therefore we develop our materials with beginners in mind. However, we acknowledge the existence of handful of technologies that may be unfamiliar to those who are just getting started in web development/programming (e.g. Node.js, javascript, and the command line). That being said, we are happy if participants have a basic level computational literacy and have some exposure to mapping tools such as Tilemill, Mapbox Studio, or Maputnik, and web mapping libraries such as leaflet.js and Mapboxgl.js. 
+The workshop is aimed to be as inclusive as possible and therefore we develop our materials with beginners in mind. However, we acknowledge the existence of handful of technologies that may be unfamiliar to those who are just getting started in web development/programming (e.g. Node.js, javascript, and the command line). That being said, we are happy if participants have a basic level computational literacy and have some exposure to mapping tools such as Tilemill, Mapbox Studio, or Maputnik, and web mapping libraries such as leaflet.js and Mapboxgl.js.
 
 
 <!-- ***
@@ -18,7 +23,7 @@ The workshop is aimed to be as inclusive as possible and therefore we develop ou
 ***
 * -->
 
-## Requirements: 
+## Requirements:
 
 
 ⚠️ **NOTE: originally the workshop was planned around using Openshift as a free service to run our tileserver. With the phasing out of the Openshift 2 service, I've had to make some last minute solutions using another platform-as-a-service (PaaS) called [Heroku](heroku.com). Tilehut.js hasn't been tested as extensively as with Openshift nor is it very scalable running on Heroku, but I will follow up post-workshop with a better solution. For now, I hope you all will learn something new today. Thanks for understanding.** ⚠️
@@ -46,7 +51,7 @@ The workshop is aimed to be as inclusive as possible and therefore we develop ou
 
 <!-- ## Outline & Itinerary: -->
 
-<!-- 
+<!--
 * Introduction & Overview of the session and outcomes
 * **Part 1**: Geojournies begin with data
     - overview of the data
@@ -60,7 +65,7 @@ The workshop is aimed to be as inclusive as possible and therefore we develop ou
 * **Part 5**: Deploy Tilehut and show the world your maps!
     - deploy tilehut.js to heroku and show your map to the world
 * **Part 6**: working time + debugging
-	- take time to revisit learned items, debug setup issues, and work on your own data. 
+	- take time to revisit learned items, debug setup issues, and work on your own data.
 * Outro, feedback, and shareouts
  -->
 
@@ -123,7 +128,7 @@ Please sign in here & feel free to document, ask questions, or make comments on 
 
 * A few slides to give you an [overview of the workshop](/slides/index.html)
 * I'm [joey](jk-lee.com), your workshop host.
-* Say hello to eachother! 
+* Say hello to eachother!
 
 * What are we going to accomplish today?
     >- we're going to be visualize data from [Boston's Hubway bike sharing service](https://www.thehubway.com/datachallenge), namely the counts and the sum time to-and-from each station.
@@ -166,15 +171,15 @@ Please sign in here & feel free to document, ask questions, or make comments on 
 
 ![image of hubway counts between stops](assets/images/hubway-counts-routed.png)
 
-For this workshop, I've prepared [1 month of Boston's Hubway Bike Service data](https://www.thehubway.com/system-data) from January 2017.  Why January? one of the coldest months of the year? 
+For this workshop, I've prepared [1 month of Boston's Hubway Bike Service data](https://www.thehubway.com/system-data) from January 2017.  Why January? one of the coldest months of the year?
 > I made the assumption that there would probably be less trips ==> meaning a smaller dataset for us to work with ==> more efficient for the workshop, yet still interesting. (Hooray for data management!)
 
 <!--You can get the [raw data here](https://www.thehubway.com/system-data).-->
 
-The data we will work with are: 
+The data we will work with are:
 
->1. the counts of the trips to-and-from each station, 
->2. the sum time of the trips to-and-from each station, and 
+>1. the counts of the trips to-and-from each station,
+>2. the sum time of the trips to-and-from each station, and
 >3. the Hubway Stations
 
 I used a `group-by` function to group the data in a python script which you can find [here](scripts/analysis.py). The data come in a `csv` file with the following fields which are all pretty self explanatory:
@@ -194,7 +199,7 @@ I used a `group-by` function to group the data in a python script which you can 
 
 <br>
 
-### Sketching with 🚴 data 
+### Sketching with 🚴 data
 
 
 I made a few attempts to prepare the data in a way that might help us to communicate the volume of Hubway trips occuring across Boston. Here's what I tried:
@@ -204,12 +209,12 @@ I made a few attempts to prepare the data in a way that might help us to communi
 ![Hubway trips as linear lines](assets/images/hubway-counts-linear.png)
 
 
->**Attempt 2 - Bezier ODs:** I tried to add some arcs to see if maybe aesthetically we could squeeze out some love, but I'm not sure that this is so readable either. #thosecurvestho 
+>**Attempt 2 - Bezier ODs:** I tried to add some arcs to see if maybe aesthetically we could squeeze out some love, but I'm not sure that this is so readable either. #thosecurvestho
 
 ![Hubway trips as bezier curves](assets/images/hubway-counts-bezier.png)
 
 
->**Solution - Routed ODs:** Lastly, I decided to plug in all those bike trips into [Graphhopper](https://github.com/graphhopper/graphhopper), which is pretty much my favorite open source routing engine at the moment (shout out to @graphhopper for making great stuffs!) to *take a guess* at where all those trips might have taken place along roads and bike paths throughout Metro Boston. The results look quite convincing - if any native Bostonians might be able to validate, that would be super! 
+>**Solution - Routed ODs:** Lastly, I decided to plug in all those bike trips into [Graphhopper](https://github.com/graphhopper/graphhopper), which is pretty much my favorite open source routing engine at the moment (shout out to @graphhopper for making great stuffs!) to *take a guess* at where all those trips might have taken place along roads and bike paths throughout Metro Boston. The results look quite convincing - if any native Bostonians might be able to validate, that would be super!
 
 ![Hubway trips routed using Graphhopper](assets/images/hubway-counts-routed.png)
 
@@ -249,7 +254,7 @@ For the purpose of this workshop, we will use this routed dataset to produce our
 ### What's a Tippecanoe?
 
 
-So now we've got our bike data bound up in our friendly, but bloated geojson file format. Aren't you just itching to pack up all up into this wonderfully efficient, web friendly thing we call Vector tiles? 
+So now we've got our bike data bound up in our friendly, but bloated geojson file format. Aren't you just itching to pack up all up into this wonderfully efficient, web friendly thing we call Vector tiles?
 
 There are a number of ways to achieve this, but the way we're going to do it today is by using an opensource tool by [Mapbox](mapbox.com) called [Tippecanoe](https://github.com/mapbox/tippecanoe). I'm not sure why it is called Tippecanoe, but it is a lovely name and an even lovelier piece of software. The intention behind [Tippecanoe](https://github.com/mapbox/tippecanoe) is to not have to forefeit the details of our data especially when they matter most. [Tippecanoe](https://github.com/mapbox/tippecanoe) does this by taking advantage of some [handy tricks]() such as zoom level based point aggregation and other methods.
 
@@ -259,7 +264,7 @@ There are a number of ways to achieve this, but the way we're going to do it tod
 ### Installation
 
 
-If you haven't installed [Tippecanoe](https://github.com/mapbox/tippecanoe), we can do this together later or you can follow the instructions on the project webpage [here](https://github.com/mapbox/tippecanoe). Easiest is if you use [Homebrew](https://brew.sh/) for OSX or [Docker](https://www.docker.com/). 
+If you haven't installed [Tippecanoe](https://github.com/mapbox/tippecanoe), we can do this together later or you can follow the instructions on the project webpage [here](https://github.com/mapbox/tippecanoe). Easiest is if you use [Homebrew](https://brew.sh/) for OSX or [Docker](https://www.docker.com/).
 
 
 <br>
@@ -276,10 +281,10 @@ Fire up your terminal and enter the following:
 cd data
 
 # run the conversion
-tippecanoe -o hubway-routed.mbtiles -maximum-zoom 13 -l hubwayRouted 201701_hubway_routes_all.geojson 
+tippecanoe -o hubway-routed.mbtiles -maximum-zoom 13 -l hubwayRouted 201701_hubway_routes_all.geojson
 ```
 
-What's happening here: 
+What's happening here:
 
 >* **tippecanoe**: this calls the tippecanoe function
 * **-o  hubway-routed.mbtiles**: says, "our output file will be called hubway-routed.mbtiles in the data folder"
@@ -291,9 +296,9 @@ The result will be an a file in your data folder called: [hubway-routed.mbtiles]
 
 More on the various Tippecanoe flags can be read about [here]().
 
-In this workshop we aren't going to convert the stations to vector .mbtiles for a number of reasons: 
-> * first, the stations are only a few kilobytes (~32) which aren't going to melt your browser, 
-> * second, that gives us an opportunity to work with some other aspects of mapbox GL's api. 
+In this workshop we aren't going to convert the stations to vector .mbtiles for a number of reasons:
+> * first, the stations are only a few kilobytes (~32) which aren't going to melt your browser,
+> * second, that gives us an opportunity to work with some other aspects of mapbox GL's api.
 
 
 <br>
@@ -340,7 +345,7 @@ On the flip side, if you want to handle a bunch of points and you need some fanc
 
 So now that we've got our bike trip tiles created, it's time to get our tile server up and running. Ooh so exciting!
 
-There's a number of platform-as-a-service (PaaS) services that, among many things, act as tileservers. You might be familiar with some of the bigger ones like Mapbox, Carto, and Mapzen, but there are plenty of others that you can brew up on your own. 
+There's a number of platform-as-a-service (PaaS) services that, among many things, act as tileservers. You might be familiar with some of the bigger ones like Mapbox, Carto, and Mapzen, but there are plenty of others that you can brew up on your own.
 
 For this workshop, I'm going to introduce you to [Tilehut.js](https://github.com/b-g/tilehut), a little tileserver that I worked on with a few of my friends to help make it easier to host your own interactive raster and vector tiles. Tilehut.js is just wrapper for a lot of the existing tileserving technology like [Mike Migurski's Tilestache](http://tilestache.org/) and Mapbox's [node-mbtiles](https://github.com/mapbox/node-mbtiles) that was born out of our own want/need to have a bit more control over our data as well as room to experiment. So let's get Tilehut.js running, shall we?
 
@@ -352,14 +357,14 @@ For this workshop, I'm going to introduce you to [Tilehut.js](https://github.com
 
 To install (requires Node.js installed) :
 
->1. Clone or download the zip of the **TILEHUT-HEROKU Branch of Tilhut.js** from: [https://github.com/b-g/tilehut/tree/tilehut-heroku](https://github.com/b-g/tilehut/tree/tilehut-heroku). 
+>1. Clone or download the zip of the **TILEHUT-HEROKU Branch of Tilhut.js** from: [https://github.com/b-g/tilehut/tree/tilehut-heroku](https://github.com/b-g/tilehut/tree/tilehut-heroku).
 >2. Fire up your terminal and run:
 
 ```
 # change into the tilehut directory
 cd tilehut
 # this installs all the dependencies
-npm install 
+npm install
 # this starts the server
 npm start
 # check in your browser: http://localhost:8000/tiles-world-simple/map/
@@ -370,7 +375,7 @@ If you see a world map on your screen, you've successfully installed Tilehut.js 
 
 ![](assets/images/tilehut-simple-world.png)
 
-For now, let's explore Tilehut.js a bit. 
+For now, let's explore Tilehut.js a bit.
 
 *If you're so inclined, you are also welcome to use [tilehut-docker](https://hub.docker.com/r/joeyklee/tilehut-docker/). NOTE: you will have to change the `config.js` for things to work correctly with Heroku since that docker image reflects the setup for OpenShift.*
 
@@ -394,9 +399,9 @@ So here's all the subdirectories and files you see that make up Tilehut.js. The 
 >* <strike>config.js </strike>     
 >* <strike>node_modules </strike>  
 >* <strike>static</strike>
->* <strike>TileService.js</strike> 
+>* <strike>TileService.js</strike>
 >* data           
->* <strike>package.json</strike> 
+>* <strike>package.json</strike>
 >* tutorial
 
 That leaves us with:
@@ -426,10 +431,10 @@ We have 2 files here:
 
 ![](assets/images/tilehut-example-index-script-highlight.png)
 
-You'll notice: 
+You'll notice:
 
 >* I've highlighted the javascript code between the `<script></script>` tags
->* and pointed to ↩︎ the property called `style.json`. You might be thinking, "is this is the reference to *our* `style.json` in our folder?" You bet it is! 
+>* and pointed to ↩︎ the property called `style.json`. You might be thinking, "is this is the reference to *our* `style.json` in our folder?" You bet it is!
 
 **style.json**: so logicaly, we can deduce that our `style.json` is affecting the `style` of our map in this instance. Easy as pie 🍰. If we open our `style.json` file, we will see the following:
 
@@ -440,10 +445,10 @@ You'll notice:
 >* we have a gobbley json file with three main properties:
     - `version`: defines a version of the file
     - `sources`: defines the sources of where our tiles are coming from
-    - `layers`: defines what layers will be displayed on the map. 
+    - `layers`: defines what layers will be displayed on the map.
     - `spite` : defines the spritesheet for using custom images for markers and fill patterns (not shown in our current style.json)
 
-A short aside on sprites: we don't have a `sprite` sheet defined, but if we wanted to add some custom image markers, these would be defined in our `mapboxgl.Map()` `style` property as `sprite: link/to/spritesheet-name`. You can see an [example of a Mapbox spritesheet](https://www.mapbox.com/mapbox-gl-styles/sprites/bright.json) and create your own using software like [texturePacker](https://www.codeandweb.com/texturepacker) or I'm sure there's plug-ins for illustrator or SketchApp. 
+A short aside on sprites: we don't have a `sprite` sheet defined, but if we wanted to add some custom image markers, these would be defined in our `mapboxgl.Map()` `style` property as `sprite: link/to/spritesheet-name`. You can see an [example of a Mapbox spritesheet](https://www.mapbox.com/mapbox-gl-styles/sprites/bright.json) and create your own using software like [texturePacker](https://www.codeandweb.com/texturepacker) or I'm sure there's plug-ins for illustrator or SketchApp.
 
 ![](assets/images/sprite-sheets.png)
 
@@ -498,7 +503,7 @@ sources: {
     "tiles": [
         "the url to the tiles being served"
     ],
-    "maxzoom": 5 
+    "maxzoom": 5
   }
 }
 ```
@@ -562,7 +567,7 @@ In the case of our example map, we can see that we have 2 layers defined by the 
 
 > **background** is a type of layer that can be included in any project. We define this `background-color` with a hexcode. Want to try changing it? Go ahead! Need a suggestion, try: `#deeded`
 
-> **countries-fill**: is a `type:fill` layer which is used for polygons. Since our countries are polygons, this makes sense.  Here you can see we've correctly defined `source: tilehut`, and `source-layer: countriesgeojson` which is what the .mbtiles name is . Why don't you try changing the `fill-color` and the `fill-outline-color` to `#cadfad`. Don't be shy, it won't break! 
+> **countries-fill**: is a `type:fill` layer which is used for polygons. Since our countries are polygons, this makes sense.  Here you can see we've correctly defined `source: tilehut`, and `source-layer: countriesgeojson` which is what the .mbtiles name is . Why don't you try changing the `fill-color` and the `fill-outline-color` to `#cadfad`. Don't be shy, it won't break!
 
 you might end up with something like this:
 
@@ -572,7 +577,7 @@ you might end up with something like this:
 **NOTE**: If you ever are wondering why your styles aren't working, make sure to check that you've correctly defined the `type` property!
 
 <br>
-#### Getting the meta information from your tiles: meta.json 
+#### Getting the meta information from your tiles: meta.json
 
 At some point you will have to check what a vector tile layer is called. This isn't apparent by the file name itself, but you can dig into the details of a vector tile layer by you can quering it using Tilehut by using the `/meta.json` endpoint:
 
@@ -700,7 +705,7 @@ In the next sections we are going to:
 ### Serve up your bike trips tiles
 
 
-Let's start by throwing our hubway bike trips into our Tilehut `data/` folder. Take your `data/hubway-routed.mbtiles` from the workshop folder and move them ==> to the `tilehut/data/` folder. 
+Let's start by throwing our hubway bike trips into our Tilehut `data/` folder. Take your `data/hubway-routed.mbtiles` from the workshop folder and move them ==> to the `tilehut/data/` folder.
 
 ![](assets/images/tilehut-move-data.png)
 
@@ -787,9 +792,9 @@ If this isn't what you see, then check to make sure your tileserver is running a
 
 ![](assets/images/slides-part4.png)
 
-Here in part 4, we're going to simultaneously learn about: 
+Here in part 4, we're going to simultaneously learn about:
 
->1. how to style our data using mapboxGL's vector tile specifications 
+>1. how to style our data using mapboxGL's vector tile specifications
 >2. refactoring our existing code for more flexibility with styling
 
 
@@ -803,13 +808,13 @@ Navigate over to our `examples/01-trips` folder and take a look inside. The file
 >* index.html
 >* style.json
 
-Open the `index.html` file in your browser to see what is cooking. 
+Open the `index.html` file in your browser to see what is cooking.
 
 ![](assets/images/tilehut-example-trips.png)
 
-Lo and behold, our routed hubway trips! While the visualization is really simple and not that useful, our tiles are being served up as we expect. So that's a start. 
+Lo and behold, our routed hubway trips! While the visualization is really simple and not that useful, our tiles are being served up as we expect. So that's a start.
 
-If you open up the `index.html` and the `style.json` files in your text editor, you will notice that the `index.html` file is identical to the example we saw earlier. However if we open our `style.json` file, we will see that there are some changes. 
+If you open up the `index.html` and the `style.json` files in your text editor, you will notice that the `index.html` file is identical to the example we saw earlier. However if we open our `style.json` file, we will see that there are some changes.
 
 ![](assets/images/tilehut-example-trips-stylejson.png)
 
@@ -833,23 +838,23 @@ Now navigate over to `examples/02-trips-refactored`. You will notice some key di
 
 >* `map.addSource("source-id", {object with the source definitions})`
 	+ description:
-    * this function adds a new source to our map. 
+    * this function adds a new source to our map.
   + parameters:
-    * `source-id`: 
+    * `source-id`:
         - this is a name of our source. So far we've been calling our source "tilehut", but you might venture so far as to calling it "tilehut-trips" or something else that reflects what we're looking at.
-    * `{object with the source definitions}`: 
+    * `{object with the source definitions}`:
         - this is our object that contains the info about the source such as `type:vector`, `tiles:["link/to/tiles"]`, etc.
 >* `map.addLayer({object with layer definitions})`
-  + description: 
+  + description:
       * this function adds a new layer to the map
   + parameters:
-      * `{object with the layer definitions}`: 
-          - this is our object that contains the info about our layer's `paint`, `type`, etc. 
-  
+      * `{object with the layer definitions}`:
+          - this is our object that contains the info about our layer's `paint`, `type`, etc.
 
-This pattern `map.addSource()... map.addLayer()` is something that you might encounter as you work more with vector tiles. 
 
->* **THIRD:** We define the`{object with layer definitions}` and assign them to variables within our code. Here we create an `{object with layer definitions}` for... 
+This pattern `map.addSource()... map.addLayer()` is something that you might encounter as you work more with vector tiles.
+
+>* **THIRD:** We define the`{object with layer definitions}` and assign them to variables within our code. Here we create an `{object with layer definitions}` for...
 	- hubwayHaloTripStyle: for creating a halo like effect
 	- hubwayTripStyle: the main paths where the trips occured
 
@@ -861,7 +866,7 @@ This pattern `map.addSource()... map.addLayer()` is something that you might enc
 
 #### layer style check
 
-Before we continue, let's just have a look at the layer definition for the `hubway-routed-halo` layer. 
+Before we continue, let's just have a look at the layer definition for the `hubway-routed-halo` layer.
 
 ```
 {
@@ -895,7 +900,7 @@ Before we continue, let's just have a look at the layer definition for the `hubw
 
 Here we can see some new changes to our style:
 
->* "source": 
+>* "source":
     - notice it now just references the name of the source id we defined earlier
 * "line-blur":
     - we add some nice line-blur to get a halo like feeling
@@ -903,7 +908,7 @@ Here we can see some new changes to our style:
     - "property": "count",
         + notice we've added a "property:count". This says, "give me the count property from our data", and then style the data based on these data.
     - "base":
-        + base says, how the interpolation should be done between 
+        + base says, how the interpolation should be done between
     - "stops":
         + this is a list of lists that defines, "for the given `"property":"count"`, give me [the value of count, the line-width]"
 * "line-cap" & "line-join": you can take a look at the different possibilities [here](https://www.mapbox.com/mapbox-gl-js/style-spec/#layers-line).
@@ -914,7 +919,7 @@ Here we can see some new changes to our style:
 ### Examples/03-trips-and-stations
 
 
-Now that we have our bike trips styled and looking all nice and shiny, the next step is to add our `bike stations` data to the map. 
+Now that we have our bike trips styled and looking all nice and shiny, the next step is to add our `bike stations` data to the map.
 
 The only things we haven't yet seen here are:
 
@@ -931,8 +936,8 @@ $.getJSON("hubway_Stations_201606.geojson", function(myStations) {
 Note: we put all of our code inside getJSON callback to make sure our data is loaded before we do anything.
 
 >* **SECOND**: We add a new layer source to our map. :
-    - We set the new source to `"type":"geojson"` since our data is a geojson file and ==> 
-    - then we take the data that we read in from the `$.getJSON()` request called `myStations` and ==> 
+    - We set the new source to `"type":"geojson"` since our data is a geojson file and ==>
+    - then we take the data that we read in from the `$.getJSON()` request called `myStations` and ==>
     - set that to the `"data": myStations`. This allows us to now style our stations as we've done with our trip layer style.
 
 ```
@@ -942,7 +947,7 @@ map.addSource("station-geojson", {
 });
 ```
 
->* **THIRD**: we add 2 new layer style definitions with `"type": "circle"` and `"type": "symbol"`. You can see the each type has it's own style properties which are shown in the documentation [here]() and [here](). 
+>* **THIRD**: we add 2 new layer style definitions with `"type": "circle"` and `"type": "symbol"`. You can see the each type has it's own style properties which are shown in the documentation [here]() and [here]().
 
 >* **LAST**: we add the layers in the order that we want them to appear, from bottom to top:
 
@@ -1028,13 +1033,13 @@ git commit -m "initial commit"
 ### Setup <strike>Openshift</strike>Heroku & deploy
 
 
-<!-- 
-> SO the setup guide to Openshift provided in Tilehut is pretty excellent, so let's follow along [here](https://github.com/b-g/tilehut/tree/master/tutorial#option-2-via-openshift) 
+<!--
+> SO the setup guide to Openshift provided in Tilehut is pretty excellent, so let's follow along [here](https://github.com/b-g/tilehut/tree/master/tutorial#option-2-via-openshift)
 -->
 
 *"Heroku is a cloud platform as a service (PaaS) supporting several programming languages that is used as a web application deployment model".* I just want to emphasize that this is a temporary solution - stay tuned for updates!
 
-> First and foremost, you will need an account with [Heroku](https://dashboard.heroku.com/) - Heroku offers a free account (~5 projects, and ~500mb of storage). [Please make an account](https://dashboard.heroku.com/) and go through the sign up procedures. 
+> First and foremost, you will need an account with [Heroku](https://dashboard.heroku.com/) - Heroku offers a free account (~5 projects, and ~500mb of storage). [Please make an account](https://dashboard.heroku.com/) and go through the sign up procedures.
 
 ![](assets/images/heroku-signup.png)
 
@@ -1128,7 +1133,7 @@ map.addSource('tilehut-hubway-routes', {
 });
 ```
 
-to: 
+to:
 
 ```
 map.addSource('tilehut-hubway-routes', {
@@ -1150,7 +1155,7 @@ This whole time we've been working off the styles I've defined for the data, but
 >* Adjust the representation of the `line-width` properties of the trips - could they be wider for more emphasis?
 >* change the `line-cap` and `line-join` properties. what happens?
 >* change the stations label style - make them larger or change the font.
->* add popups to our data using the example [here](https://www.mapbox.com/mapbox-gl-js/example/popup-on-click/). 
+>* add popups to our data using the example [here](https://www.mapbox.com/mapbox-gl-js/example/popup-on-click/).
 
 ![vector tile popups](assets/images/vector-tile-popups.png)
 
@@ -1160,11 +1165,11 @@ This whole time we've been working off the styles I've defined for the data, but
 ### Deploy using Github pages
 
 
-> And now to close the circle, we can host our project on github pages so we can show our map to the world! 
+> And now to close the circle, we can host our project on github pages so we can show our map to the world!
 
 ![](assets/images/ghpages-project-folder-image.png)
 
-> To make a github pages website, here's a pretty [well documented and beginner friendly example here](http://docs.pinegrow.com/host-html-website-github-pages-free/). 
+> To make a github pages website, here's a pretty [well documented and beginner friendly example here](http://docs.pinegrow.com/host-html-website-github-pages-free/).
 
 
 
@@ -1204,13 +1209,13 @@ This whole time we've been working off the styles I've defined for the data, but
 
 <center>![make all the things](http://s.quickmeme.com/img/e7/e7ec8aa0f8bbe5d1af19ccf3c819967f649b43a974e18bfbe10bc412f3da9090.jpg) </center>
 
-My recommendation is to take your own data and go through each step, from converting data, tweaking parameters in Tippecanoe, styling the vector tiles, and pushing your tiles to your remote server. Practice, practice, practice! 
+My recommendation is to take your own data and go through each step, from converting data, tweaking parameters in Tippecanoe, styling the vector tiles, and pushing your tiles to your remote server. Practice, practice, practice!
 
-If you don't have your own data, we haven't talked about styling our `total_duration` yet, but we now have all the components we need to do so. During our open working session, you're welcome to come up with a style for the `total_duration` or work on your own data. 
+If you don't have your own data, we haven't talked about styling our `total_duration` yet, but we now have all the components we need to do so. During our open working session, you're welcome to come up with a style for the `total_duration` or work on your own data.
 
-We covered a lot and there's more yet to explore. How about making a [little map app that displays different layers on button clicks](https://www.mapbox.com/mapbox-gl-js/example/toggle-layers/)? 
+We covered a lot and there's more yet to explore. How about making a [little map app that displays different layers on button clicks](https://www.mapbox.com/mapbox-gl-js/example/toggle-layers/)?
 
-The next hour or so will be dedicated to collaborative working time, debugging, and lots of trial and error. Let's take this time to make all the things! 
+The next hour or so will be dedicated to collaborative working time, debugging, and lots of trial and error. Let's take this time to make all the things!
 
 ### Data links:
 
@@ -1259,4 +1264,3 @@ Anyone want to share what they've made?
 * use the "tiles" array to specifify your 3rd party tiles: https://github.com/mapbox/mapbox-gl-js/issues/866
 * tilehut-docker: https://hub.docker.com/r/joeyklee/tilehut-docker/tags/\
 * [joeyklee.github.io/geosandbox](joeyklee.github.io/geosandbox): a handy little interactive reference for working with the web geo libraries.
-
